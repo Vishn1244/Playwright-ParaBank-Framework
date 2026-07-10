@@ -1,0 +1,27 @@
+const { chromium } = require('playwright');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  const username = 'user' + Date.now();
+  const password = 'Password@123';
+  await page.goto('https://parabank.parasoft.com/parabank/register.htm');
+  await page.locator('input[id="customer.firstName"]').fill('Test');
+  await page.locator('input[id="customer.lastName"]').fill('User');
+  await page.locator('input[id="customer.address.street"]').fill('123 Main');
+  await page.locator('input[id="customer.address.city"]').fill('City');
+  await page.locator('input[id="customer.address.state"]').fill('ST');
+  await page.locator('input[id="customer.address.zipCode"]').fill('12345');
+  await page.locator('input[id="customer.phoneNumber"]').fill('1234567890');
+  await page.locator('input[id="customer.ssn"]').fill('111223333');
+  await page.locator('input[id="customer.username"]').fill(username);
+  await page.locator('input[id="customer.password"]').fill(password);
+  await page.locator('input[id="repeatedPassword"]').fill(password);
+  await page.locator('input[value="Register"]').click();
+  await page.waitForURL(/overview\.htm/, { timeout: 30000 });
+  console.log('registered', username, password);
+  console.log('overview', await page.locator('#rightPanel').innerText());
+  await page.goto('https://parabank.parasoft.com/parabank/openaccount.htm');
+  await page.waitForLoadState('networkidle');
+  console.log('openaccount text', await page.locator('#rightPanel').innerText());
+  await browser.close();
+})();

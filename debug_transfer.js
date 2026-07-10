@@ -1,0 +1,24 @@
+const { chromium } = require('@playwright/test');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto('https://parabank.parasoft.com/parabank/login.htm', { timeout: 60000 });
+  console.log('URL after load', page.url());
+  const username = page.locator('input[name="username"]');
+  console.log('username count', await username.count());
+  await username.fill('john');
+  await page.locator('input[name="password"]').fill('demo');
+  await page.locator('input[value="Log In"]').click();
+  await page.waitForURL(/overview\.htm/, { timeout: 60000 });
+  console.log('Logged in, url', page.url());
+  await page.click('a:text("Transfer Funds")');
+  await page.waitForURL(/transfer\.htm/, { timeout: 60000 });
+  console.log('Transfer page url', page.url());
+  const fromCount = await page.locator('#fromAccountId option').count();
+  const toCount = await page.locator('#toAccountId option').count();
+  console.log('FROM COUNT', fromCount);
+  console.log('FROM HTML', await page.innerHTML('#fromAccountId'));
+  console.log('TO COUNT', toCount);
+  console.log('TO HTML', await page.innerHTML('#toAccountId'));
+  await browser.close();
+})();

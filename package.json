@@ -1,0 +1,27 @@
+{
+  "name": "playwright-parabank-framework",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:chrome": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.0",
+    "allure-playwright": "^3.10.2",
+    "cross-env": "^10.x.x"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "csv-parser": "^3.2.1",
+    "dotenv": "^17.4.2",
+    "winston": "^3.19.0",
+    "xlsx": "^0.18.5"
+  }
+}

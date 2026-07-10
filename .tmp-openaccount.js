@@ -1,0 +1,21 @@
+const { chromium } = require('playwright');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto('https://parabank.parasoft.com/parabank/index.htm');
+  await page.locator('input[name="username"]').fill('john');
+  await page.locator('input[name="password"]').fill('demo');
+  await page.locator('input[value="Log In"]').click();
+  await page.waitForURL(/overview\.htm/);
+  console.log('before overview text', await page.locator('#rightPanel').innerText());
+  await page.goto('https://parabank.parasoft.com/parabank/openaccount.htm');
+  await page.waitForLoadState('networkidle');
+  await page.locator('#type').selectOption({ label: 'SAVINGS' });
+  await page.locator('input[value="Open New Account"]').click();
+  await page.waitForTimeout(4000);
+  console.log('after open account text', await page.locator('#openAccountResult').innerText());
+  await page.goto('https://parabank.parasoft.com/parabank/overview.htm');
+  await page.waitForLoadState('networkidle');
+  console.log('overview after open text', await page.locator('#accountTable').innerText());
+  await browser.close();
+})();
